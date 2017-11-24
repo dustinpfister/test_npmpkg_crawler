@@ -1,8 +1,10 @@
 var Crawler = require("crawler"),
 _ = require('lodash'),
+fs = require('fs'),
 cheerio = require('cheerio');
 
 var startURL = 'http://localhost:8888',
+
 pages = [{
         url: '/'
     }
@@ -10,18 +12,34 @@ pages = [{
 
 var c = new Crawler({
         maxConnections: 1,
+        jQuery: false,
         // This will be called for each crawled page
         callback: function (error, res, done) {
 
             if (error) {
 
-                console.log(error);
+                //console.log(error);
 
             } else {
 
                 var $ = cheerio.load(res.body);
 
-                $("a").each(function (i, el) {
+                console.log(res.options.uri);
+
+                var pg = _.find(pages, function (pg) {
+
+                        return res.options.uri === pg.uri;
+
+                    });
+
+                if (pg) {
+
+                    pg.title = $('title').text();
+
+                }
+
+                // follow links
+                $('a').each(function (i, el) {
 
                     // does it have an href?
                     if (el.attribs.href) {
@@ -35,19 +53,26 @@ var c = new Crawler({
 
                                     href = href.replace(/#.+$/, '');
 
-                                    return pg.url === href;
+                                    return pg.href === href;
 
                                 });
 
                             if (!pg) {
 
-                                pages.push({
-                                    url: el.attribs.href
-                                });
+                                // push a new record for it
 
-                                console.log(el.attribs.href);
+                                pg = {
+                                    href: el.attribs.href,
+                                    uri: startURL + el.attribs.href
+                                };
 
-                                c.queue(startURL + el.attribs.href);
+                                pages.push(pg);
+
+                                //var url = startURL + el.attribs.href;
+                                //console.log(url);
+                                //console.log(el.attribs.href);
+
+                                c.queue(pg.uri);
 
                             }
 
@@ -64,9 +89,13 @@ var c = new Crawler({
 
 c.on('drain', function () {
 
-    console.log('we be done man');
-    console.log();
-    console.log(pages);
+    console.log(pages.length + ' pages crawled.');
+
+    fs.writeFile('report.json', JSON.stringify(pages), 'utf-8', function () {
+
+        console.log('json written');
+
+    });
 
 });
 
