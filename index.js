@@ -1,102 +1,54 @@
-var Crawler = require("crawler"),
-_ = require('lodash'),
-fs = require('fs'),
-cheerio = require('cheerio');
+var Hapi = require('hapi');
 
-var startURL = 'http://localhost:8888',
+var server = new Hapi.Server();
+server.connection({
+    port: 8888,
+    host: 'localhost'
+});
 
-pages = [{
-        url: '/'
+server.register(require('inert'), function (e) {
+
+    if (e) {
+
+        console.log(e);
+
     }
-];
 
-var c = new Crawler({
-        maxConnections: 1,
-        jQuery: false,
-        // This will be called for each crawled page
-        callback: function (error, res, done) {
-
-            if (error) {
-
-                //console.log(error);
-
-            } else {
-
-                var $ = cheerio.load(res.body);
-
-                console.log(res.options.uri);
-
-                var pg = _.find(pages, function (pg) {
-
-                        return res.options.uri === pg.uri;
-
-                    });
-
-                if (pg) {
-
-                    pg.title = $('title').text();
-
-                }
-
-                // follow links
-                $('a').each(function (i, el) {
-
-                    // does it have an href?
-                    if (el.attribs.href) {
-
-                        // is it an internal link?
-                        if (el.attribs.href[0] === '/') {
-
-                            var pg = _.find(pages, function (pg) {
-
-                                    var href = el.attribs.href;
-
-                                    href = href.replace(/#.+$/, '');
-
-                                    return pg.href === href;
-
-                                });
-
-                            if (!pg) {
-
-                                // push a new record for it
-
-                                pg = {
-                                    href: el.attribs.href,
-                                    uri: startURL + el.attribs.href
-                                };
-
-                                pages.push(pg);
-
-                                //var url = startURL + el.attribs.href;
-                                //console.log(url);
-                                //console.log(el.attribs.href);
-
-                                c.queue(pg.uri);
-
-                            }
-
-                        }
-
-                    }
-
-                });
-
+    server.route({
+        method: 'GET',
+        path: '/{param*}',
+        handler: {
+            directory: {
+                path: 'public',
+                listing: true
             }
-            done();
         }
     });
 
-c.on('drain', function () {
+    /*
+    server.route({
+    method: 'GET',
+    path: '/',
+    handler: function (request, reply) {
+    reply('Hello, world!');
+    }
+    });
+     */
 
-    console.log(pages.length + ' pages crawled.');
+    server.start(function (e) {
 
-    fs.writeFile('report.json', JSON.stringify(pages), 'utf-8', function () {
+        if (e) {
 
-        console.log('json written');
+            console.log(e);
+
+        } else {
+
+            console.log('hapi server up:');
+            console.log('port: ' + server.info.port);
+            console.log('uri: ' + server.info.uri);
+
+        }
 
     });
 
 });
-
-c.queue(startURL);
