@@ -1,9 +1,17 @@
 var Hapi = require('hapi');
 
-var server = new Hapi.Server();
+var server = new Hapi.Server(),
+
+// open shift?
+openShift = {
+    appName: 'CRAWL_TEST1_NAME'
+};
+openShift.port = 'NODEJS_' + openShift.appName + '_SERVICE_PORT';
+openShift.host = 'NODEJS_' + openShift.appName + '_HOST';
+
 server.connection({
-    port: process.env.OPENSHIFT_NODEJS_PORT || 8080,
-    host: process.env.OPENSHIFT_NODEJS_IP || 'localhost'
+    port: openShift.port || 8080,
+    host: openShift.host || 'localhost'
 });
 
 server.register(require('inert'), function (e) {
@@ -47,6 +55,7 @@ server.register(require('inert'), function (e) {
             console.log('port: ' + server.info.port);
             console.log('uri: ' + server.info.uri);
             console.log('');
+            console.log('OPENSHIFT_APP_NAME: ' + OPENSHIFT_APP_NAME);
             console.log('process.env:');
             console.log(process.env);
 
