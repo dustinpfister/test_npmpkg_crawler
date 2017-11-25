@@ -2,7 +2,8 @@ var Hapi = require('hapi');
 
 var server = new Hapi.Server();
 server.connection({
-    port: 8080
+    port: process.env.OPENSHIFT_NODEJS_PORT || 8080,
+    host: process.env.OPENSHIFT_NODEJS_IP || 'localhost'
 });
 
 server.register(require('inert'), function (e) {
@@ -45,6 +46,9 @@ server.register(require('inert'), function (e) {
             console.log('hapi server up:');
             console.log('port: ' + server.info.port);
             console.log('uri: ' + server.info.uri);
+            console.log('');
+            console.log('process.env:');
+            console.log(process.env);
 
         }
 
