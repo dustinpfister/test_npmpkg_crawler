@@ -2,8 +2,7 @@ var Hapi = require('hapi');
 
 var server = new Hapi.Server();
 server.connection({
-    port: 8080,
-    host: 'localhost'
+    port: 8080
 });
 
 server.register(require('inert'), function (e) {
