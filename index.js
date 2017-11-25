@@ -10,8 +10,8 @@ openShift.port = process.env['NODEJS_' + openShift.appName + '_SERVICE_PORT'];
 openShift.host = process.env['NODEJS_' + openShift.appName + '_HOST'];
 
 server.connection({
-    port: openShift.port || 8080,
-    host: openShift.host || 'localhost'
+    port: 8080,
+    host: 172.30.231.52 //openShift.host || 'localhost'
 });
 
 server.register(require('inert'), function (e) {
@@ -55,7 +55,7 @@ server.register(require('inert'), function (e) {
             console.log('port: ' + server.info.port);
             console.log('uri: ' + server.info.uri);
             console.log('');
-            console.log('OPENSHIFT_APP_NAME: ' + OPENSHIFT_APP_NAME);
+            console.log('OPENSHIFT_APP_NAME: ' + process.env['OPENSHIFT_APP_NAME']);
             console.log('process.env:');
             console.log(process.env);
 
