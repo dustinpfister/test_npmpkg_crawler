@@ -11,7 +11,7 @@ openShift.host = process.env['NODEJS_' + openShift.appName + '_HOST'];
 
 server.connection({
     port: 8080,
-    host: 172.30.231.52 //openShift.host || 'localhost'
+    host: '172.30.231.52' //openShift.host || 'localhost'
 });
 
 server.register(require('inert'), function (e) {
