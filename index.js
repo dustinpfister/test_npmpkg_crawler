@@ -6,8 +6,8 @@ var server = new Hapi.Server(),
 openShift = {
     appName: 'CRAWL_TEST1_NAME'
 };
-openShift.port = 'NODEJS_' + openShift.appName + '_SERVICE_PORT';
-openShift.host = 'NODEJS_' + openShift.appName + '_HOST';
+openShift.port = process.env['NODEJS_' + openShift.appName + '_SERVICE_PORT'];
+openShift.host = process.env['NODEJS_' + openShift.appName + '_HOST'];
 
 server.connection({
     port: openShift.port || 8080,
