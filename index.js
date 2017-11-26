@@ -11,7 +11,20 @@ var server = http.createServer(function (req, res) {
 
     });
 
-server.listen(8080,'172.30.231.52');
+console.log('hold onto your butts.');
+server.listen(8080, '172.30.231.52', function (e) {
+
+    if (e) {
+
+        console.log(e);
+
+    } else {
+
+        console.log('okay check it.');
+
+    }
+
+});
 
 /*
 var Hapi = require('hapi');
