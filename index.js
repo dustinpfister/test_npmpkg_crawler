@@ -5,6 +5,9 @@ var server = new Hapi.Server();
 // does not work
 // 'nodejs-crawl-test1-name-13-26rlm'
 
+// log env here before it fails
+console.log('process.env:');
+console.log(process.env);
 
 server.connection({
     port: 8080,
@@ -52,9 +55,3 @@ server.register(require('inert'), function (e) {
     });
 
 });
-
-
-
-
-            console.log('process.env:');
-            console.log(process.env);
