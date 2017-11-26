@@ -1,4 +1,8 @@
 
+console.log('well I am still trying, can you belive it.');
+console.log(process.env);
+
+/*
 var http = require("http");
 
 var server = http.createServer(function (req, res) {
@@ -26,6 +30,8 @@ server.listen(8080, 'nodejs-crawl-test1-name-13-26rlm', function (e) {
     }
 
 });
+
+*/
 
 /*
 var Hapi = require('hapi');
