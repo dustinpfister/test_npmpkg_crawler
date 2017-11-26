@@ -1,14 +1,16 @@
 
 
 
-var Hapi = require('hapi');
+var Hapi = require('hapi'),
 
-var server = new Hapi.Server();
+crawl = require('./crawl.js'),
+
+server = new Hapi.Server();
 
 console.log(process.env);
 
 server.connection({
-    port: process.env.PORT ||5000
+    port: process.env.PORT || 5000
 });
 
 server.register(require('inert'), function (e) {
@@ -27,6 +29,29 @@ server.register(require('inert'), function (e) {
                 path: 'public',
                 listing: true
             }
+        }
+    });
+
+    server.route({
+        method: 'POST',
+        path: '/',
+        handler: function (requset, reply) {
+
+            console.log();
+
+            var url = requset.payload;
+
+            if (url) {
+
+                crawl.crawl(url);
+                reply('url processed');
+
+            } else {
+
+                reply('no url');
+
+            }
+
         }
     });
 

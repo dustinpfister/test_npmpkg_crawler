@@ -3,8 +3,8 @@ _ = require('lodash'),
 fs = require('fs'),
 cheerio = require('cheerio');
 
-//var startURL = 'http://localhost:8888',
-var startURL = 'https://davidwalsh.name/',
+var startURL = 'http://localhost:8888',
+//var startURL = 'https://dustinpfister.github.io/',
 
 
 pages = [{
@@ -13,95 +13,124 @@ pages = [{
     }
 ],
 
-c = new Crawler({
-        maxConnections: 1,
-        jQuery: false,
-        // This will be called for each crawled page
-        callback: function (error, res, done) {
+newCrawl = function () {
 
-            var $,
-            pg;
+    c = new Crawler({
+            maxConnections: 1,
+            jQuery: false,
+            // This will be called for each crawled page
+            callback: function (error, res, done) {
 
-            if (error) {
+                var $,
+                pg;
 
-                console.log(error);
+                if (error) {
 
-            } else {
+                    console.log(error);
 
-                $ = cheerio.load(res.body);
+                } else {
 
-                console.log(res.options.uri);
+                    $ = cheerio.load(res.body);
 
-                pg = _.find(pages, function (pg) {
+                    console.log(res.options.uri);
 
-                        return res.options.uri === pg.uri;
+                    pg = _.find(pages, function (pg) {
 
-                    });
+                            return res.options.uri === pg.uri;
 
-                if (pg) {
+                        });
 
-                    pg.title = $('title').text();
+                    if (pg) {
 
-                }
+                        pg.title = $('title').text();
 
-                // follow links
-                $('a').each(function (i, el) {
+                    }
 
-                    var pg;
+                    // follow links
+                    $('a').each(function (i, el) {
 
-                    // does it have an href?
-                    if (el.attribs.href) {
+                        var pg;
 
-                        // is it an internal link?
-                        if (el.attribs.href[0] === '/') {
+                        // does it have an href?
+                        if (el.attribs.href) {
 
-                            pg = _.find(pages, function (pg) {
+                            // is it an internal link?
+                            if (el.attribs.href[0] === '/') {
 
-                                    var href = el.attribs.href;
+                                pg = _.find(pages, function (pg) {
 
-                                    href = href.replace(/#.+$/, '');
+                                        var href = el.attribs.href;
 
-                                    return pg.href === href;
+                                        href = href.replace(/#.+$/, '');
 
-                                });
+                                        return pg.href === href;
 
-                            if (!pg) {
+                                    });
 
-                                // push a new record for it
-                                pg = {
-                                    href: el.attribs.href,
-                                    uri: startURL + el.attribs.href
-                                };
+                                if (!pg) {
 
-                                pages.push(pg);
+                                    // push a new record for it
+                                    pg = {
+                                        href: el.attribs.href,
+                                        uri: startURL + el.attribs.href
+                                    };
 
-                                c.queue(pg.uri);
+                                    pages.push(pg);
+
+                                    c.queue(pg.uri);
+
+                                }
 
                             }
 
                         }
 
-                    }
+                    });
 
-                });
-
+                }
+                done();
             }
-            done();
-        }
+        });
+
+    c.on('drain', function () {
+
+        console.log(pages.length + ' pages crawled.');
+
+        // write out a json file
+        fs.writeFile('./public/report.json', JSON.stringify(pages), 'utf-8', function () {
+
+            console.log('json written');
+
+        });
+
     });
 
-c.on('drain', function () {
+    return c;
 
-    console.log(pages.length + ' pages crawled.');
-
-    // write out a json file
-    fs.writeFile('report.json', JSON.stringify(pages), 'utf-8', function () {
-
-        console.log('json written');
-
-    });
-
-});
+};
 
 // start with page 0
-c.queue(pages[0].uri);
+//c.queue(pages[0].uri);
+
+exports.crawl = function (stURL, done) {
+
+    startURL = stURL || 'http://localhost:8888';
+    done = done || function () {};
+
+    pages = [{
+            url: '/',
+            uri: startURL + '/'
+        }
+    ];
+
+    var c = newCrawl();
+
+    c.on('drain', function () {
+
+        done();
+
+    });
+
+    c.queue(pages[0].uri);
+
+};

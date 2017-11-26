@@ -1,1 +1,45 @@
-<p>yes we are ready</p>
+<script>
+var postIt = function (data, url, beforeSend, done, fail) {
+ 
+    var xhr = new XMLHttpRequest();
+ 
+    url = url || 'http://localhost:5000';
+    data = data || {};
+    beforeSend = beforeSend || function(xhr,next){
+       next();
+    },
+    done = done || function (xhr) {
+        console.log(xhr);
+    };
+    fail = fail || function (xhr) {
+        console.log(xhr);
+    };
+ 
+    xhr.open('post', url);
+ 
+    xhr.onreadystatechange = function () {
+ 
+        if (this.readyState === 4) {
+ 
+            if (this.status === 200) {
+ 
+                done(this);
+ 
+            } else {
+ 
+                fail(this);
+ 
+            }
+ 
+        }
+ 
+    };
+ 
+    beforeSend(xhr, function(){
+ 
+        xhr.send(data);
+ 
+    });
+ 
+};
+</script>
