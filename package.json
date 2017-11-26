@@ -1,15 +1,27 @@
 {
-  "name": "test_node_crawler",
+  "name": "test_npmpkg_crawler",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
+  "dependencies": {
+    "hapi": "16.6.2",
+    "inert": "4.2.1",
+    "crawler": "1.1.1",
+    "lodash": "4.17.4"
+  },
+  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dustinpfister/test_npmpkg_crawler.git"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "bugs": {
+    "url": "https://github.com/dustinpfister/test_npmpkg_crawler/issues"
   },
-  "devDependencies": {},
-  "description": ""
+  "homepage": "https://github.com/dustinpfister/test_npmpkg_crawler#readme"
 }

@@ -1,98 +1,50 @@
 
-console.log('well I am still trying, can you belive it.');
-console.log(process.env.PORT);
-console.log(process.env.IP);
 
-/*
-var http = require("http");
 
-var server = http.createServer(function (req, res) {
+var Hapi = require('hapi');
 
-        res.writeHead(500, {
-            "Content-Type": "text/plain"
-        });
-        res.write('oh look it works, I guess openshift doesnt suck after all');
-        res.end();
+var server = new Hapi.Server();
 
-    });
-
-console.log('hold onto your butts.');
 console.log(process.env);
-server.listen(8080, 'nodejs-crawl-test1-name-13-26rlm', function (e) {
+
+server.connection({
+    port: process.env.PORT ||5000,
+    host: process.env.HOST || 'localhost'
+});
+
+server.register(require('inert'), function (e) {
 
     if (e) {
 
         console.log(e);
 
-    } else {
-
-        console.log('okay check it.');
-
     }
 
-});
+    server.route({
+        method: 'GET',
+        path: '/{param*}',
+        handler: {
+            directory: {
+                path: 'public',
+                listing: true
+            }
+        }
+    });
 
-*/
+    server.start(function (e) {
 
-/*
-var Hapi = require('hapi');
+        if (e) {
 
-var server = new Hapi.Server();
- */
+            console.log(e);
 
-// does not work
-// 'nodejs-crawl-test1-name-13-26rlm'
-// '172.30.231.52'
+        } else {
 
-/*
-// log env here before it fails
-console.log('process.env:');
-console.log(process.env);
+            console.log('hapi server up:');
+            console.log('port: ' + server.info.port);
+            console.log('uri: ' + server.info.uri);
 
-server.connection({
-port: 8080,
-host: '172.30.231.52' //openShift.host || 'localhost'
-});
+        }
 
-server.register(require('inert'), function (e) {
-
-if (e) {
-
-console.log(e);
-
-}
-
-server.route({
-method: 'GET',
-path: '/{param*}',
-handler: {
-directory: {
-path: 'public',
-listing: true
-}
-}
-});
-
-server.start(function (e) {
-
-if (e) {
-
-console.log(e);
-
-} else {
-
-console.log('hapi server up:');
-console.log('port: ' + server.info.port);
-console.log('uri: ' + server.info.uri);
-console.log('');
-console.log('OPENSHIFT_APP_NAME: ' + process.env['OPENSHIFT_APP_NAME']);
-console.log('HOSTNAME: ' + process.env['HOSTNAME']);
-console.log('process.env:');
-console.log(process.env);
-
-}
+    });
 
 });
-
-});
-*/
