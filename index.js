@@ -12,7 +12,8 @@ var server = http.createServer(function (req, res) {
     });
 
 console.log('hold onto your butts.');
-server.listen(8080, 'http://172.30.231.52', function (e) {
+console.log(process.env);
+server.listen(8080, '172.30.231.52', function (e) {
 
     if (e) {
 
