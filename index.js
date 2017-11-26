@@ -1,6 +1,7 @@
 
 console.log('well I am still trying, can you belive it.');
-console.log(process.env);
+console.log(process.env.PORT);
+console.log(process.env.IP);
 
 /*
 var http = require("http");
