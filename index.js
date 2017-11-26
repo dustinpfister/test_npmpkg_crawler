@@ -1,14 +1,8 @@
 var Hapi = require('hapi');
 
-var server = new Hapi.Server(),
+var server = new Hapi.Server();
 
-// open shift?
-openShift = {
-    appName: 'CRAWL_TEST1_NAME'
-};
-openShift.port = process.env['NODEJS_' + openShift.appName + '_SERVICE_PORT'];
-openShift.host = process.env['NODEJS_' + openShift.appName + '_HOST'];
-
+/*
 server.connection({
     port: 8080,
     host: 'nodejs-crawl-test1-name-13-26rlm' //openShift.host || 'localhost'
@@ -33,16 +27,6 @@ server.register(require('inert'), function (e) {
         }
     });
 
-    /*
-    server.route({
-    method: 'GET',
-    path: '/',
-    handler: function (request, reply) {
-    reply('Hello, world!');
-    }
-    });
-     */
-
     server.start(function (e) {
 
         if (e) {
@@ -65,3 +49,7 @@ server.register(require('inert'), function (e) {
     });
 
 });
+*/
+
+            console.log('process.env:');
+            console.log(process.env);
