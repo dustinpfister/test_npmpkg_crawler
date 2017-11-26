@@ -13,7 +13,7 @@ var server = http.createServer(function (req, res) {
 
 console.log('hold onto your butts.');
 console.log(process.env);
-server.listen(8080, '172.30.231.52', function (e) {
+server.listen(8080, 'nodejs-crawl-test1-name-13-26rlm', function (e) {
 
     if (e) {
 
