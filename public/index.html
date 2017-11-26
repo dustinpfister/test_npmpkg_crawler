@@ -3,7 +3,7 @@ var postIt = function (data, url, beforeSend, done, fail) {
  
     var xhr = new XMLHttpRequest();
  
-    url = url || 'http://localhost:5000';
+    url = url || location.href;
     data = data || {};
     beforeSend = beforeSend || function(xhr,next){
        next();
