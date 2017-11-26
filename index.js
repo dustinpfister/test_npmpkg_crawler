@@ -8,8 +8,7 @@ var server = new Hapi.Server();
 console.log(process.env);
 
 server.connection({
-    port: process.env.PORT ||5000,
-    host: process.env.HOST || 'localhost'
+    port: process.env.PORT ||5000
 });
 
 server.register(require('inert'), function (e) {
