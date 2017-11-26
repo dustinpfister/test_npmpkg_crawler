@@ -22,7 +22,7 @@ newCrawl = function () {
             callback: function (error, res, done) {
 
                 var $,
-                pg;
+                currentPG;
 
                 if (error) {
 
@@ -34,15 +34,15 @@ newCrawl = function () {
 
                     console.log(res.options.uri);
 
-                    pg = _.find(pages, function (pg) {
+                    currentPG = _.find(pages, function (pg) {
 
                             return res.options.uri === pg.uri;
 
                         });
 
-                    if (pg) {
+                    if (currentPG) {
 
-                        pg.title = $('title').text();
+                        currentPG.title = $('title').text();
 
                     }
 
