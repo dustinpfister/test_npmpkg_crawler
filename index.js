@@ -2,10 +2,13 @@ var Hapi = require('hapi');
 
 var server = new Hapi.Server();
 
-/*
+// does not work
+// 'nodejs-crawl-test1-name-13-26rlm'
+
+
 server.connection({
     port: 8080,
-    host: 'nodejs-crawl-test1-name-13-26rlm' //openShift.host || 'localhost'
+    host: '172.30.231.52' //openShift.host || 'localhost'
 });
 
 server.register(require('inert'), function (e) {
@@ -49,7 +52,9 @@ server.register(require('inert'), function (e) {
     });
 
 });
-*/
+
+
+
 
             console.log('process.env:');
             console.log(process.env);
