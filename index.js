@@ -4,6 +4,7 @@ var server = new Hapi.Server();
 
 // does not work
 // 'nodejs-crawl-test1-name-13-26rlm'
+// '172.30.231.52'
 
 // log env here before it fails
 console.log('process.env:');
@@ -11,7 +12,7 @@ console.log(process.env);
 
 server.connection({
     port: 8080,
-    host: '172.30.231.52' //openShift.host || 'localhost'
+    host: 'tcp://172.30.231.52' //openShift.host || 'localhost'
 });
 
 server.register(require('inert'), function (e) {
